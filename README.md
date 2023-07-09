@@ -2,6 +2,10 @@
 
 Mountain Sounds is a Python script that generates a sound wave from elevation data. It can take either a GPX file or start/end coordinates as input, and it outputs a sound wave file, an image of the frequency profile, an image of the elevation profile, and a video that combines the sound wave and elevation profile.
 
+Here's an example video output:
+
+https://github.com/typpo/mountain-sounds/assets/310310/49fef4ae-c5e9-42b1-b0df-fe70fff66279
+
 ## Usage
 
 There are two ways to use this script: with a GPX file or with start/end coordinates.
