@@ -7,13 +7,37 @@ readme = "README.md"
 packages = [{include = "mountain_sounds"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.13"
 requests = "^2.31.0"
 numpy = "^1.25.1"
 pydub = "^0.25.1"
 elevation = "^1.1.3"
 rasterio = "^1.3.8"
+geopy = "^2.3.0"
+scipy = "^1.11.1"
+matplotlib = "^3.7.2"
+moviepy = "^1.0.3"
+gpxpy = "^1.5.0"
 
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
 
 [build-system]
 requires = ["poetry-core"]
