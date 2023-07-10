@@ -179,34 +179,48 @@ def export_sound_wave_image(frequency_profile, filename):
 
 
 def export_video(
-    elevation_profile, distances, audio_path, video_path, duration, title=None
+    elevation_profile,
+    distances,
+    audio_path,
+    video_path,
+    duration,
+    title=None,
+    framerate=60,
 ):
     assert len(elevation_profile) == len(
         distances
     ), "There must be a distance value for each elevation value"
+
+    total_frames = duration * framerate
+    x = np.linspace(0, len(elevation_profile) - 1, total_frames)
+    interpolated_elevation_profile = np.interp(
+        x, np.arange(len(elevation_profile)), elevation_profile
+    )
+    interpolated_distances = np.interp(x, np.arange(len(distances)), distances)
+
     fig, ax = plt.subplots()
     if title is not None:
         plt.title(title)
     (line,) = ax.plot(
-        distances, elevation_profile * 3.281
+        interpolated_distances, interpolated_elevation_profile * 3.281
     )  # Convert from meters to feet
     ax.set_xlabel("Distance (miles)")
     ax.set_ylabel("Elevation (ft)")
 
-    def update(num, elevation_profile, line):
+    def update(num, interpolated_elevation_profile, line):
         line.set_data(
-            distances[: num + 1], elevation_profile[: num + 1] * 3.281
+            interpolated_distances[: num + 1],
+            interpolated_elevation_profile[: num + 1] * 3.281,
         )  # Update both x and y data and convert from meters to feet
-        print(f"Rendering frame {num+1} of {len(elevation_profile)}")
+        print(f"Rendering frame {num+1} of {total_frames}")
         return (line,)
 
-    frame_rate = len(elevation_profile) / duration
     ani = animation.FuncAnimation(
         fig,
         update,
-        len(elevation_profile),
-        fargs=[elevation_profile, line],
-        interval=1000 / frame_rate,
+        total_frames,
+        fargs=[interpolated_elevation_profile, line],
+        interval=1000 / framerate,
     )
 
     # Save the animation as a video file
